@@ -47,15 +47,15 @@ st.markdown("""
 /* Pixel glowing title */
 .glow-title {
     font-family: 'Press Start 2P', cursive;
-    font-size: 48px;
+    font-size: 72px;  /* BIG for big screen */
     color: #ffea00;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     animation: pulse 2.3s infinite;
 }
 @keyframes pulse {
     0% { text-shadow: 0 0 6px #ffea00; }
-    50% { text-shadow: 0 0 22px #ffea00; }
+    50% { text-shadow: 0 0 32px #ffea00; }
     100% { text-shadow: 0 0 6px #ffea00; }
 }
 
@@ -63,11 +63,11 @@ st.markdown("""
 .ghost-container {
     text-align: center;
     margin-top: -5px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .ghost {
-    font-size: 60px;
-    margin: 0 15px;
+    font-size: 80px;  /* BIG ghosts */
+    margin: 0 20px;
     display: inline-block;
     animation: floaty 3s ease-in-out infinite;
 }
@@ -77,7 +77,7 @@ st.markdown("""
 
 @keyframes floaty {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-20px); }
     100% { transform: translateY(0px); }
 }
 
@@ -85,31 +85,37 @@ st.markdown("""
 .subtext {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 24px;
+    font-size: 36px;   /* BIG subtext */
     color: #ffb7ff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #9b4bff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 12px #9b4bff;
 }
 
-/* Pixel-style DataFrame */
-[data-testid="stDataFrame"] table {
+/* Pixel-style table */
+.pixel-table {
     font-family: 'Press Start 2P', cursive;
-    font-size: 32px !important;
+    font-size: 48px;  /* HUGE for big screen */
     text-align: center;
+    width: 100%;
+    border-collapse: collapse;
 }
-[data-testid="stDataFrame"] table th {
-    text-align: center !important;
-    font-size: 36px !important;
+.pixel-table th, .pixel-table td {
+    padding: 25px;
+    border: 3px solid #ffea00;
 }
-[data-testid="stDataFrame"] table td {
-    text-align: center !important;
-    font-size: 32px !important;
+.pixel-table th {
+    background-color: #ffea00;
+    color: #1a0028;
+}
+.pixel-table td {
+    color: #ffffff;
 }
 
-/* Make table container wider */
-[data-testid="stDataFrame"] div.row-widget.stDataFrame {
-    width: 100% !important;
-}
+/* Top 3 row colors */
+.top1 { background-color: rgba(255,215,0,0.5); color: #FFD700; font-weight:bold; }
+.top2 { background-color: rgba(192,192,192,0.5); color: #C0C0C0; font-weight:bold; }
+.top3 { background-color: rgba(205,127,50,0.5); color: #CD7F32; font-weight:bold; }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -125,20 +131,17 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.markdown('<div class="subtext">TOP TEAMS UPDATED LIVE DURING THE LGD!</div>', unsafe_allow_html=True)
 
-# ---------- TOP-3 ROW COLORS ----------
-def style_top3(row):
-    if row.name == 0:
-        return ['background-color: rgba(255,215,0,0.3); color: #FFD700; font-weight:bold;'] * len(row)
-    if row.name == 1:
-        return ['background-color: rgba(192,192,192,0.3); color: #C0C0C0; font-weight:bold;'] * len(row)
-    if row.name == 2:
-        return ['background-color: rgba(205,127,50,0.3); color: #CD7F32; font-weight:bold;'] * len(row)
-    return ['background-color: rgba(255,255,255,0.05); color: white;'] * len(row)
+# ---------- BUILD HTML TABLE ----------
+table_html = "<table class='pixel-table'><thead><tr><th>Rank</th><th>Team</th><th>Score</th><th>Icon</th></tr></thead><tbody>"
+for i, row in df.iterrows():
+    cls = ""
+    if i == 0: cls = "top1"
+    elif i == 1: cls = "top2"
+    elif i == 2: cls = "top3"
+    table_html += f"<tr class='{cls}'><td>{i+1}</td><td>{row['team']}</td><td>{row['score']}</td><td>{row['icon']}</td></tr>"
+table_html += "</tbody></table>"
 
-styled_df = df.style.apply(style_top3, axis=1)
-
-# ---------- DISPLAY LEADERBOARD ----------
-st.dataframe(styled_df, use_container_width=True, height=500)
+st.markdown(table_html, unsafe_allow_html=True)
 
 # ---------- FOOTER ----------
-st.markdown('<div class="subtext" style="margin-top:30px;">🍒 Keep scoring! 🍒</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtext">🍒 Keep scoring! 🍒</div>', unsafe_allow_html=True)
