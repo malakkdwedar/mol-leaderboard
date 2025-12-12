@@ -21,7 +21,7 @@ st.markdown(
 st_autorefresh = st.experimental_rerun
 
 # --- LOAD GOOGLE SHEET ---
-sheet_url = "PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE"
+sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQXL1MUBynMkoACJNX5O1aXJznbUP36M6RWunBPWI78tRyLq13tXNnSkAqkhz0pHOzcs6yDfnBcnp_l/pub?output=csv"
 df = pd.read_csv(sheet_url)
 
 # --- SORT BY SCORE ---
