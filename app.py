@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import time
+from streamlit_autorefresh import st_autorefresh
 
 # --- PAGE CONFIG ---
 st.set_page_config(
@@ -18,10 +18,10 @@ st.markdown(
 )
 
 # --- AUTO REFRESH EVERY 3 SECONDS ---
-st_autorefresh = st.experimental_rerun
+st_autorefresh(interval=3000, key="leaderboard")
 
 # --- LOAD GOOGLE SHEET ---
-sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQXL1MUBynMkoACJNX5O1aXJznbUP36M6RWunBPWI78tRyLq13tXNnSkAqkhz0pHOzcs6yDfnBcnp_l/pub?output=csv"
+sheet_url = "PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE"
 df = pd.read_csv(sheet_url)
 
 # --- SORT BY SCORE ---
