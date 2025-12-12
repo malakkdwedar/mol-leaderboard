@@ -1,204 +1,136 @@
-# app.py
 import streamlit as st
 import pandas as pd
 import gspread
-import streamlit.components.v1 as components
 from streamlit_autorefresh import st_autorefresh
 
 # --- Page config ---
 st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🕹️", layout="wide")
 
-# --- Auto-refresh every 5 seconds ---
-st_autorefresh(interval=5000, key="leaderboard_refresh")
+# Auto-refresh every 5 seconds
+st_autorefresh(interval=5000, key="refresh")
 
 # --- Cached Google Sheet connection ---
 @st.cache_resource
 def get_sheet():
     client = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
-    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  # <- replace if needed
-    sheet = client.open_by_key(SHEET_KEY).sheet1
-    return sheet
+    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"
+    return client.open_by_key(SHEET_KEY).sheet1
 
-# Try to get sheet; if there's a problem, we'll fall back to placeholder data
 try:
     sheet = get_sheet()
+    data = sheet.get_all_records()
+    df = pd.DataFrame(data)
 except Exception:
-    sheet = None
-    st.warning("Couldn't connect to Google Sheets — showing placeholder data.")
-
-# ----------------- Styling block (font, title glow, ghosts, container) -----------------
-st.markdown(
-    """
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        /* App background color (page) */
-        .stApp {
-            background-color: #120019;  /* deep purple page background */
-            color: white;
-        }
-
-        /* Floating container (this holds the maze background and the leaderboard) */
-        .leaderboard-container {
-            background-image: url('https://i.pinimg.com/1200x/9f/c9/93/9fc99302c35961da24f02dcf74fc854d.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 18px;
-            padding: 28px;
-            width: 80%;
-            margin: 36px auto;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(255, 200, 0, 0.12);
-            backdrop-filter: blur(3px);
-        }
-
-        /* Press Start 2P pixel title with pulsing glow */
-        .glow-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 44px;
-            color: #ffea00;
-            margin: 6px 0 6px 0;
-            animation: pulseGlow 2.2s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { text-shadow: 0 0 6px #ffea00; }
-            50% { text-shadow: 0 0 26px #ffea00; }
-            100% { text-shadow: 0 0 6px #ffea00; }
-        }
-
-        /* Ghosts under title (floating) */
-        .ghost-container {
-            text-align: center;
-            margin-top: -6px;
-            margin-bottom: 6px;
-        }
-        .ghost {
-            font-size: 40px;
-            display: inline-block;
-            margin: 0 18px;
-            animation: floatGhost 3.4s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.06));
-        }
-        .ghost:nth-child(2) { animation-delay: 0.6s; }
-        .ghost:nth-child(3) { animation-delay: 1.2s; }
-        .ghost:nth-child(4) { animation-delay: 1.8s; }
-        @keyframes floatGhost {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Pixel-style subtext and footer */
-        .subglow {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 20px;
-            color: #ffffff;
-            text-shadow: 0 0 10px #9933ff;
-            margin: 6px 0 14px 0;
-        }
-        .footer-text {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 20px;
-            color: #ffea00;
-            text-shadow: 0 0 12px #ffea00;
-            margin-top: 14px;
-            margin-bottom: 6px;
-        }
-
-        /* Make pandas/st.dataframe table text centered and larger */
-        div[data-testid="stDataFrameContainer"] table tbody tr td {
-            text-align: center !important;
-            font-size: 16px !important;
-            vertical-align: middle !important;
-        }
-        div[data-testid="stDataFrameContainer"] table thead tr th {
-            text-align: center !important;
-            font-size: 16px !important;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# ----------------- Container start -----------------
-st.markdown('<div class="leaderboard-container">', unsafe_allow_html=True)
-
-# Title + ghosts + subtext
-st.markdown("<div class='glow-title'>🕹️👾 Pac-Man Leaderboard 🕹️👾</div>", unsafe_allow_html=True)
-st.markdown(
-    """
-    <div class='ghost-container'>
-        <span class='ghost'>👻</span>
-        <span class='ghost'>👻</span>
-        <span class='ghost'>👻</span>
-        <span class='ghost'>👻</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-st.markdown("<div class='subglow'>TOP TEAMS UPDATED LIVE DURING THE LGD!</div>", unsafe_allow_html=True)
-
-# ----------------- Fetch and prepare data -----------------
-if sheet is not None:
-    try:
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
-    except Exception:
-        st.error("Error reading sheet — showing placeholder data.")
-        df = pd.DataFrame()
-else:
-    df = pd.DataFrame()
-
-# Placeholder if empty
-if df.empty:
     df = pd.DataFrame({
-        "team": ["Team A", "Team B", "Team C", "Team D"],
-        "score": [120, 95, 80, 60],
-        "icon": ["🟡", "👻", "🍒", "⭐"]
+        "team": ["Team A", "Team B", "Team C"],
+        "score": [120, 95, 80],
+        "icon": ["🟡", "👻", "🍒"]
     })
 
-# Normalize and sort
+# Normalize + sort
 df.columns = df.columns.str.lower()
 if "score" in df.columns:
     df["score"] = pd.to_numeric(df["score"], errors="coerce").fillna(0)
 df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
 
-# ----------------- Safe CSS highlighting for top 3 -----------------
-def highlight_row_css(row):
-    if row.name == 0:
-        css = 'background-color: rgba(255,215,0,0.13); color: #FFD700; font-weight: 700;'
-    elif row.name == 1:
-        css = 'background-color: rgba(192,192,192,0.11); color: #C0C0C0; font-weight: 700;'
-    elif row.name == 2:
-        css = 'background-color: rgba(205,127,50,0.11); color: #CD7F32; font-weight: 700;'
-    else:
-        css = 'background-color: rgba(0,0,0,0.18); color: #FFFFFF;'
-    return [css] * len(row)
+# ---------- STYLE CSS ----------
+st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
 
-styled = df.style.apply(highlight_row_css, axis=1)
+.stApp {
+    background-color: #1a0028 !important;   /* Deep purple */
+    color: white;
+}
 
-# Prepare display_df with nicer headers
-display_df = df.copy().rename(columns=lambda x: x.capitalize())
+/* Pixel glowing title */
+.glow-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 42px;
+    color: #ffea00;
+    text-align: center;
+    margin-bottom: 6px;
+    animation: pulse 2.3s infinite;
+}
+@keyframes pulse {
+    0% { text-shadow: 0 0 6px #ffea00; }
+    50% { text-shadow: 0 0 22px #ffea00; }
+    100% { text-shadow: 0 0 6px #ffea00; }
+}
 
-# ---------- RENDER STYLED TABLE: use components.html for compatibility ----------
-# Get HTML from the Styler. Use to_html() which is broadly available.
-try:
-    styled_html = styled.to_html()
-except Exception:
-    # fallback: render plain dataframe HTML
-    styled_html = display_df.to_html(classes="dataframe", index=False)
+/* Ghost animations */
+.ghost-container {
+    text-align: center;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+.ghost {
+    font-size: 40px;
+    margin: 0 15px;
+    display: inline-block;
+    animation: floaty 3s ease-in-out infinite;
+}
+.ghost:nth-child(2) { animation-delay: 0.4s; }
+.ghost:nth-child(3) { animation-delay: 0.8s; }
+.ghost:nth-child(4) { animation-delay: 1.2s; }
 
-# Wrap the table HTML in a container that ensures proper sizing and background transparency
-table_wrapper = f"""
-<div style="background-color: rgba(0,0,0,0.18); padding: 12px; border-radius: 10px;">
-{styled_html}
+@keyframes floaty {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Pixel subtext */
+.subtext {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    font-size: 17px;
+    color: #ffb7ff;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px #9b4bff;
+}
+
+/* Make table text centered + larger */
+[data-testid="stDataFrame"] table {
+    font-size: 18px !important;
+}
+[data-testid="stDataFrame"] table th {
+    text-align: center !important;
+}
+[data-testid="stDataFrame"] table td {
+    text-align: center !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------- TITLE ----------
+st.markdown("<div class='glow-title'>🕹️👾 Pac-Man Leaderboard 🕹️👾</div>", unsafe_allow_html=True)
+
+st.markdown("""
+<div class='ghost-container'>
+    <span class='ghost'>👻</span>
+    <span class='ghost'>👻</span>
+    <span class='ghost'>👻</span>
+    <span class='ghost'>👻</span>
 </div>
-"""
+""", unsafe_allow_html=True)
 
-# Render the HTML table (scrolling enabled)
-components.html(table_wrapper, height=420, scrolling=True)
+st.markdown("<div class='subtext'>TOP TEAMS UPDATED LIVE DURING THE LGD!</div>", unsafe_allow_html=True)
 
-# Footer text
-st.markdown("<div class='footer-text'>🍒 KEEP SCORING — POWER PELLETS AWAIT! 🍒</div>", unsafe_allow_html=True)
+# ---------- TOP-3 ROW COLORS ----------
+def style_top3(row):
+    if row.name == 0:
+        return ['background-color: rgba(255,215,0,0.25); color: #FFD700; font-weight:bold;'] * len(row)
+    if row.name == 1:
+        return ['background-color: rgba(192,192,192,0.25); color: #C0C0C0; font-weight:bold;'] * len(row)
+    if row.name == 2:
+        return ['background-color: rgba(205,127,50,0.25); color: #CD7F32; font-weight:bold;'] * len(row)
+    return ['background-color: rgba(255,255,255,0.05); color: white;'] * len(row)
 
-# ----------------- Close container -----------------
-st.markdown('</div>', unsafe_allow_html=True)
+styled_df = df.style.apply(style_top3, axis=1)
+
+# ---------- DISPLAY LEADERBOARD ----------
+st.dataframe(styled_df, use_container_width=True, height=450)
+
+# Footer
+st.markdown("<div class='subtext' style='margin-top:20px;'>🍒 Keep scoring! 🍒</div>", unsafe_allow_html=True)
