@@ -9,21 +9,24 @@ st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🟡", layout="w
 # --- Auto-refresh every 5 seconds ---
 st_autorefresh(interval=5000, key="leaderboard_refresh")
 
-# --- Display the video as "background" ---
-st.video("https://i.imgur.com/hqOBPjS.mp4", start_time=0)
-
-# --- Floating container overlay ---
+# --- Full-page background image CSS ---
 st.markdown("""
-<div style="
-    position: relative;
-    top: -420px;  /* adjust vertical position on top of video */
-    background-color: rgba(0,0,0,0.6);
+<style>
+body {
+    background-image: url("https://i.pinimg.com/1200x/9f/c9/93/9fc99302c35961da24f02dcf74fc854d.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.leaderboard-container {
+    background-color: rgba(0,0,0,0.6);  /* semi-transparent overlay */
     padding: 20px;
     border-radius: 15px;
     width: 60%;
-    margin: 0 auto;
+    margin: 50px auto;
     text-align: center;
-">
+}
+</style>
 """, unsafe_allow_html=True)
 
 # --- Title ---
@@ -65,11 +68,12 @@ def style_rows(row):
     row_color = colors[row.name] if row.name < 3 else "rgba(0,0,0,0.6)"
     return [f'background-color: {row_color}; color: white; font-weight:bold; text-align:center' if col in df.columns else '' for col in df.columns]
 
-# --- Display leaderboard ---
+# --- Floating leaderboard container ---
+st.markdown('<div class="leaderboard-container">', unsafe_allow_html=True)
+
 st.markdown("<h3 style='color: white; text-shadow: 1px 1px 5px #00FFFF;'>Current Scores</h3>", unsafe_allow_html=True)
 st.dataframe(df.style.apply(style_rows, axis=1), height=400)
 
-# --- Close overlay div ---
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Footer ---
