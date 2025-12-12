@@ -18,12 +18,12 @@ st_autorefresh(interval=3000, key="leaderboard")
 # --- GOOGLE SHEETS AUTH ---
 # Replace "service_account.json" with your JSON key file name
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("digital-waters-481012-b4-cacaef4e7cf7.json", scope)
 client = gspread.authorize(creds)
 
 # --- LOAD SHEET ---
 # Replace "Leaderboard" with the exact name of your Google Sheet
-sheet = client.open("Leaderboard").sheet1
+sheet = client.open("Scoreboard").sheet1
 data = sheet.get_all_records()
 df = pd.DataFrame(data)
 
