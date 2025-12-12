@@ -35,8 +35,9 @@ df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
 
 # ---------- CSS ----------
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .stApp {
     background-color: #1a0028 !important;   /* Deep purple */
     color: white;
