@@ -39,10 +39,10 @@ df = pd.DataFrame(data)
 # --- Placeholder if sheet is empty ---
 if df.empty:
     df = pd.DataFrame({
-        "Team": ["Team A", "Team B", "Team C", "Team D"],
-        "Score": [0, 0, 0, 0],
-        "Color": ["#FFD700", "#FF6347", "#00BFFF", "#32CD32"],  # Gold, Tomato, DeepSkyBlue, LimeGreen
-        "Icon": ["🟡", "👻", "🍒", "⭐"]
+        "team": ["Team A", "Team B", "Team C", "Team D"],
+        "score": [0, 0, 0, 0],
+        "color": ["#FFD700", "#FF6347", "#00BFFF", "#32CD32"],  # Gold, Tomato, DeepSkyBlue, LimeGreen
+        "icon": ["🟡", "👻", "🍒", "⭐"]
     })
 
 # --- Sort by Score descending ---
