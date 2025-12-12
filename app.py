@@ -47,7 +47,7 @@ st.markdown("""
 /* Pixel glowing title */
 .glow-title {
     font-family: 'Press Start 2P', cursive;
-    font-size: 60px;
+    font-size: 50px;
     color: #ffea00;
     text-align: center;
     margin-bottom: 20px;
@@ -66,7 +66,7 @@ st.markdown("""
     margin-bottom: 20px;
 }
 .ghost {
-    font-size: 60px;
+    font-size: 50px;
     margin: 0 20px;
     display: inline-block;
     animation: floaty 3s ease-in-out infinite;
@@ -85,7 +85,7 @@ st.markdown("""
 .subtext {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 28px;
+    font-size: 24px;
     color: #ffb7ff;
     margin-bottom: 25px;
     text-shadow: 0 0 12px #9b4bff;
@@ -94,13 +94,13 @@ st.markdown("""
 /* Pixel-style table */
 .pixel-table {
     font-family: 'Press Start 2P', cursive;
-    font-size: 36px;
+    font-size: 30px;
     text-align: center;
     width: 100%;
     border-collapse: collapse;
 }
 .pixel-table th, .pixel-table td {
-    padding: 18px;
+    padding: 14px;
     border: 3px solid #ffea00;
 }
 .pixel-table th {
