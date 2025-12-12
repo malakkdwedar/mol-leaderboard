@@ -16,14 +16,14 @@ st.set_page_config(
 st_autorefresh(interval=3000, key="leaderboard")
 
 # --- GOOGLE SHEETS AUTH ---
-# Replace "service_account.json" with the name of your JSON key file
+# Replace "service_account.json" with your JSON key file name
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
 client = gspread.authorize(creds)
 
 # --- LOAD SHEET ---
-# Replace "Leaderboard" with the name of your Google Sheet
-sheet = client.open("Scoreboard").sheet1
+# Replace "Leaderboard" with the exact name of your Google Sheet
+sheet = client.open("Leaderboard").sheet1
 data = sheet.get_all_records()
 df = pd.DataFrame(data)
 
@@ -53,6 +53,7 @@ def make_row(team, score, color, icon):
         font-size:24px;
         color:white;
         box-shadow: 0 0 10px {color};
+        transition: all 0.3s ease;
     '>
         <span>{icon} {team}</span>
         <span style='color:{color}; font-size:28px;'>{score}</span>
