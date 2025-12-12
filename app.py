@@ -28,7 +28,7 @@ try:
     st.success("gspread client authorized!")
 
     # Replace with your sheet name
-    SHEET_NAME = "Your Sheet Name Here"
+    SHEET_NAME = "Scoreboard"
     sheet = client.open(SHEET_NAME).sheet1
     st.success(f"Opened sheet: {SHEET_NAME}")
 
