@@ -4,7 +4,7 @@ import gspread
 from streamlit_autorefresh import st_autorefresh
 
 # --- Page config ---
-st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🟡", layout="wide")
+st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="👾", layout="wide")
 
 # --- Auto-refresh every 5 seconds ---
 st_autorefresh(interval=5000, key="leaderboard_refresh")
@@ -25,7 +25,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Title ---
-st.markdown("<h1 style='color: yellow; text-shadow: 3px 3px 15px #FFFF00;'>🟡 Pac-Man Leaderboard 🟡</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='color: yellow; text-shadow: 3px 3px 15px #FFFF00;'>👾🕹️ Pac-Man Leaderboard 🕹️👾</h1>", unsafe_allow_html=True)
 
 # --- Google Sheet connection ---
 @st.cache_resource
