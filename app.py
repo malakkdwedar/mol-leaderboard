@@ -33,11 +33,10 @@ if "score" in df.columns:
     df["score"] = pd.to_numeric(df["score"], errors="coerce").fillna(0)
 df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
 
-# ---------- STYLE CSS ----------
+# ---------- CSS ----------
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-
 .stApp {
     background-color: #1a0028 !important;   /* Deep purple */
     color: white;
@@ -103,9 +102,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- TITLE ----------
-st.markdown("<div class='glow-title'>🕹️👾 Pac-Man Leaderboard 🕹️👾</div>", unsafe_allow_html=True)
-
+# ---------- TITLE & GHOSTS & SUBTEXT ----------
+st.markdown('<div class="glow-title">🕹️👾 Pac-Man Leaderboard 🕹️👾</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class='ghost-container'>
     <span class='ghost'>👻</span>
@@ -114,8 +112,7 @@ st.markdown("""
     <span class='ghost'>👻</span>
 </div>
 """, unsafe_allow_html=True)
-
-st.markdown("<div class='subtext'>TOP TEAMS UPDATED LIVE DURING THE LGD!</div>", unsafe_allow_html=True)
+st.markdown('<div class="subtext">TOP TEAMS UPDATED LIVE DURING THE LGD!</div>', unsafe_allow_html=True)
 
 # ---------- TOP-3 ROW COLORS ----------
 def style_top3(row):
@@ -132,5 +129,5 @@ styled_df = df.style.apply(style_top3, axis=1)
 # ---------- DISPLAY LEADERBOARD ----------
 st.dataframe(styled_df, use_container_width=True, height=450)
 
-# Footer
-st.markdown("<div class='subtext' style='margin-top:20px;'>🍒 Keep scoring! 🍒</div>", unsafe_allow_html=True)
+# ---------- FOOTER ----------
+st.markdown('<div class="subtext" style="margin-top:20px;">🍒 Keep scoring! 🍒</div>', unsafe_allow_html=True)
