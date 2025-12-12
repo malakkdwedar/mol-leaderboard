@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import gspread
+import streamlit.components.v1 as components
 from streamlit_autorefresh import st_autorefresh
 
 # --- Page config ---
@@ -13,16 +14,15 @@ st_autorefresh(interval=5000, key="leaderboard_refresh")
 # --- Cached Google Sheet connection ---
 @st.cache_resource
 def get_sheet():
-    # Use gspread.service_account_from_dict with the service account JSON saved in Streamlit secrets
     client = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
-    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  # <- replace with your sheet ID if different
+    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  # <- replace if needed
     sheet = client.open_by_key(SHEET_KEY).sheet1
     return sheet
 
 # Try to get sheet; if there's a problem, we'll fall back to placeholder data
 try:
     sheet = get_sheet()
-except Exception as e:
+except Exception:
     sheet = None
     st.warning("Couldn't connect to Google Sheets — showing placeholder data.")
 
@@ -142,7 +142,7 @@ if sheet is not None:
     try:
         data = sheet.get_all_records()
         df = pd.DataFrame(data)
-    except Exception as e:
+    except Exception:
         st.error("Error reading sheet — showing placeholder data.")
         df = pd.DataFrame()
 else:
@@ -159,13 +159,11 @@ if df.empty:
 # Normalize and sort
 df.columns = df.columns.str.lower()
 if "score" in df.columns:
-    # ensure numeric score for correct sort (coerce errors)
     df["score"] = pd.to_numeric(df["score"], errors="coerce").fillna(0)
 df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
 
 # ----------------- Safe CSS highlighting for top 3 -----------------
 def highlight_row_css(row):
-    # return list of CSS strings (one per column)
     if row.name == 0:
         css = 'background-color: rgba(255,215,0,0.13); color: #FFD700; font-weight: 700;'
     elif row.name == 1:
@@ -178,13 +176,26 @@ def highlight_row_css(row):
 
 styled = df.style.apply(highlight_row_css, axis=1)
 
-# Optionally adjust columns order / rename display headers (clean look)
-display_df = df.copy()
-# If you want nicer headers:
-display_df = display_df.rename(columns=lambda x: x.capitalize())
+# Prepare display_df with nicer headers
+display_df = df.copy().rename(columns=lambda x: x.capitalize())
 
-# Display the styled dataframe
-st.dataframe(styled.set_table_attributes('class="dataframe"').hide_index(), height=420)
+# ---------- RENDER STYLED TABLE: use components.html for compatibility ----------
+# Get HTML from the Styler. Use to_html() which is broadly available.
+try:
+    styled_html = styled.to_html()
+except Exception:
+    # fallback: render plain dataframe HTML
+    styled_html = display_df.to_html(classes="dataframe", index=False)
+
+# Wrap the table HTML in a container that ensures proper sizing and background transparency
+table_wrapper = f"""
+<div style="background-color: rgba(0,0,0,0.18); padding: 12px; border-radius: 10px;">
+{styled_html}
+</div>
+"""
+
+# Render the HTML table (scrolling enabled)
+components.html(table_wrapper, height=420, scrolling=True)
 
 # Footer text
 st.markdown("<div class='footer-text'>🍒 KEEP SCORING — POWER PELLETS AWAIT! 🍒</div>", unsafe_allow_html=True)
