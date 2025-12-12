@@ -46,12 +46,13 @@ def style_rows(row):
     row_color = colors[row.name] if row.name < 3 else "#111111"
     return [f'background-color: {row_color}; color: white; font-weight:bold; text-align:center' if col in ["team", "score", "icon"] else '' for col in df.columns]
 
-# --- CSS for animations & maze ---
+# --- CSS for maze background and animations ---
 st.markdown("""
 <style>
+/* Maze background */
 body {
     background-color: #000000;
-    background-image: url('https://i.imgur.com/Jt2I1Yg.png'); /* Pac-Man maze */
+    background-image: url('https://i.imgur.com/5nDfoyK.png'); /* Proper Pac-Man maze */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
