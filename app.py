@@ -21,6 +21,7 @@ try:
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 except Exception:
+    # Fallback data if sheet fails
     df = pd.DataFrame({
         "team": ["Team A", "Team B", "Team C"],
         "score": [120, 95, 80],
@@ -39,17 +40,17 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .stApp {
-    background-color: #1a0028 !important;   /* Deep purple */
+    background-color: #1a0028 !important;   /* Dark purple */
     color: white;
 }
 
 /* Pixel glowing title */
 .glow-title {
     font-family: 'Press Start 2P', cursive;
-    font-size: 42px;
+    font-size: 48px;
     color: #ffea00;
     text-align: center;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     animation: pulse 2.3s infinite;
 }
 @keyframes pulse {
@@ -62,10 +63,10 @@ st.markdown("""
 .ghost-container {
     text-align: center;
     margin-top: -5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .ghost {
-    font-size: 40px;
+    font-size: 60px;
     margin: 0 15px;
     display: inline-block;
     animation: floaty 3s ease-in-out infinite;
@@ -76,7 +77,7 @@ st.markdown("""
 
 @keyframes floaty {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-15px); }
     100% { transform: translateY(0px); }
 }
 
@@ -84,21 +85,30 @@ st.markdown("""
 .subtext {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 17px;
+    font-size: 24px;
     color: #ffb7ff;
-    margin-bottom: 15px;
-    text-shadow: 0 0 8px #9b4bff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #9b4bff;
 }
 
-/* Make table text centered + larger */
+/* Pixel-style DataFrame */
 [data-testid="stDataFrame"] table {
-    font-size: 18px !important;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 32px !important;
+    text-align: center;
 }
 [data-testid="stDataFrame"] table th {
     text-align: center !important;
+    font-size: 36px !important;
 }
 [data-testid="stDataFrame"] table td {
     text-align: center !important;
+    font-size: 32px !important;
+}
+
+/* Make table container wider */
+[data-testid="stDataFrame"] div.row-widget.stDataFrame {
+    width: 100% !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -118,17 +128,17 @@ st.markdown('<div class="subtext">TOP TEAMS UPDATED LIVE DURING THE LGD!</div>',
 # ---------- TOP-3 ROW COLORS ----------
 def style_top3(row):
     if row.name == 0:
-        return ['background-color: rgba(255,215,0,0.25); color: #FFD700; font-weight:bold;'] * len(row)
+        return ['background-color: rgba(255,215,0,0.3); color: #FFD700; font-weight:bold;'] * len(row)
     if row.name == 1:
-        return ['background-color: rgba(192,192,192,0.25); color: #C0C0C0; font-weight:bold;'] * len(row)
+        return ['background-color: rgba(192,192,192,0.3); color: #C0C0C0; font-weight:bold;'] * len(row)
     if row.name == 2:
-        return ['background-color: rgba(205,127,50,0.25); color: #CD7F32; font-weight:bold;'] * len(row)
+        return ['background-color: rgba(205,127,50,0.3); color: #CD7F32; font-weight:bold;'] * len(row)
     return ['background-color: rgba(255,255,255,0.05); color: white;'] * len(row)
 
 styled_df = df.style.apply(style_top3, axis=1)
 
 # ---------- DISPLAY LEADERBOARD ----------
-st.dataframe(styled_df, use_container_width=True, height=450)
+st.dataframe(styled_df, use_container_width=True, height=500)
 
 # ---------- FOOTER ----------
-st.markdown('<div class="subtext" style="margin-top:20px;">🍒 Keep scoring! 🍒</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtext" style="margin-top:30px;">🍒 Keep scoring! 🍒</div>', unsafe_allow_html=True)
