@@ -17,8 +17,16 @@ st_autorefresh(interval=3000, key="leaderboard")
 
 # --- GOOGLE SHEETS AUTH ---
 # Replace "service_account.json" with your JSON key file name
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("digital-waters-481012-b4-8107df41d97d.json", scope)
+from oauth2client.service_account import ServiceAccountCredentials
+import streamlit as st
+import gspread
+
+scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
+
+# Load credentials directly from Streamlit Secrets
+creds_dict = st.secrets["gcp_service_account"]   # <- This replaces the JSON file
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+
 client = gspread.authorize(creds)
 
 # --- LOAD SHEET ---
