@@ -46,7 +46,7 @@ def style_rows(row):
     row_color = colors[row.name] if row.name < 3 else "#111111"
     return [f'background-color: {row_color}; color: white; font-weight:bold; text-align:center' if col in ["team", "score", "icon"] else '' for col in df.columns]
 
-# --- CSS for theme & animations ---
+# --- CSS for animations & maze ---
 st.markdown("""
 <style>
 body {
@@ -66,7 +66,6 @@ body {
     animation: ghostMove 8s linear infinite;
 }
 
-/* Different ghost colors & heights */
 .blinky { color: red; top: 15%; animation-delay: 0s; }
 .pinky { color: pink; top: 35%; animation-delay: 1s; }
 .inky { color: cyan; top: 55%; animation-delay: 2s; }
@@ -82,7 +81,7 @@ body {
     animation: pacMove 6s linear infinite;
 }
 
-/* Moving dots */
+/* Dots */
 .dot {
     font-size: 1rem;
     position: absolute;
@@ -119,7 +118,7 @@ st.markdown("""
 <div class='ghost inky'>👻</div>
 <div class='ghost clyde'>👻</div>
 
-<!-- Moving dots -->
+<!-- Moving dots to simulate pellets -->
 <div class='dot' style='top:10%; animation-delay:0s;'>•</div>
 <div class='dot' style='top:30%; animation-delay:2s;'>•</div>
 <div class='dot' style='top:50%; animation-delay:4s;'>•</div>
