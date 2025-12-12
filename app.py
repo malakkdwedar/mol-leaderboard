@@ -1,4 +1,46 @@
 import streamlit as st
+import gspread
+from google.oauth2.service_account import Credentials
+
+# Debug: check loaded secrets
+st.write("Available secret keys:", st.secrets.keys())
+
+# Load your GCP service account from Streamlit secrets
+try:
+    creds_dict = st.secrets["gcp_service_account"]
+    st.write("Service account loaded:", creds_dict['client_email'])
+except KeyError:
+    st.error("Secret 'gcp_service_account' not found!")
+    st.stop()
+
+# Define the scopes required for Sheets and Drive access
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+try:
+    # Create credentials object from secret
+    creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+
+    # Authorize gspread client
+    client = gspread.authorize(creds)
+    st.success("gspread client authorized!")
+
+    # Replace with your sheet name
+    SHEET_NAME = "Your Sheet Name Here"
+    sheet = client.open(SHEET_NAME).sheet1
+    st.success(f"Opened sheet: {SHEET_NAME}")
+
+    # Fetch first row for testing
+    first_row = sheet.row_values(1)
+    st.write("First row of sheet:", first_row)
+
+except Exception as e:
+    st.error("Failed to connect to Google Sheet!")
+    st.error(e)
+    
+import streamlit as st
 
 # Debug: check which secrets are loaded
 st.write(st.secrets.keys())  # Should show ['gcp_service_account']
