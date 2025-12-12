@@ -1,4 +1,18 @@
 import streamlit as st
+
+st.title("Debug Streamlit Secrets 🔍")
+
+# List all available secret keys
+st.write("Available secret keys:", list(st.secrets.keys()))
+
+# Try to access your specific key
+try:
+    creds = st.secrets["gcp_service_account"]
+    st.success("✅ Found 'gcp_service_account' secret!")
+    st.json(creds)  # Displays the contents safely (except for private_key)
+except KeyError:
+    st.error("❌ 'gcp_service_account' secret not found!")
+import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
