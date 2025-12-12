@@ -40,14 +40,14 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .stApp {
-    background-color: #1a0028 !important;   /* Dark purple */
+    background-color: #1a0028 !important;
     color: white;
 }
 
 /* Pixel glowing title */
 .glow-title {
     font-family: 'Press Start 2P', cursive;
-    font-size: 72px;  /* BIG for big screen */
+    font-size: 60px;
     color: #ffea00;
     text-align: center;
     margin-bottom: 20px;
@@ -66,7 +66,7 @@ st.markdown("""
     margin-bottom: 20px;
 }
 .ghost {
-    font-size: 80px;  /* BIG ghosts */
+    font-size: 60px;
     margin: 0 20px;
     display: inline-block;
     animation: floaty 3s ease-in-out infinite;
@@ -77,7 +77,7 @@ st.markdown("""
 
 @keyframes floaty {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-15px); }
     100% { transform: translateY(0px); }
 }
 
@@ -85,22 +85,22 @@ st.markdown("""
 .subtext {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 36px;   /* BIG subtext */
+    font-size: 28px;
     color: #ffb7ff;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     text-shadow: 0 0 12px #9b4bff;
 }
 
 /* Pixel-style table */
 .pixel-table {
     font-family: 'Press Start 2P', cursive;
-    font-size: 48px;  /* HUGE for big screen */
+    font-size: 36px;
     text-align: center;
     width: 100%;
     border-collapse: collapse;
 }
 .pixel-table th, .pixel-table td {
-    padding: 25px;
+    padding: 18px;
     border: 3px solid #ffea00;
 }
 .pixel-table th {
