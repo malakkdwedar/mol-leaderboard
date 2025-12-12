@@ -18,8 +18,7 @@ st_autorefresh(interval=3000, key="leaderboard")
 # --- GOOGLE SHEETS AUTH ---
 # Replace "service_account.json" with your JSON key file name
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("digital-waters-481012-b4-8107df41d97d.json
-", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("digital-waters-481012-b4-8107df41d97d.json", scope)
 client = gspread.authorize(creds)
 
 # --- LOAD SHEET ---
