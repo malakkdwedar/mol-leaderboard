@@ -1,83 +1,129 @@
+# app.py
 import streamlit as st
 import pandas as pd
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 from streamlit_autorefresh import st_autorefresh
 
-# --- Cache the Google Sheet connection ---
+# --- Page config ---
+st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🕹️", layout="wide")
+
+# --- Auto-refresh every 5 seconds ---
+st_autorefresh(interval=5000, key="leaderboard_refresh")
+
+# --- Cached Google Sheet connection ---
 @st.cache_resource
 def get_sheet():
+    # Use gspread.service_account_from_dict with the service account JSON saved in Streamlit secrets
     client = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
-    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  
+    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  # <- replace with your sheet ID if different
     sheet = client.open_by_key(SHEET_KEY).sheet1
     return sheet
 
-sheet = get_sheet()
+# Try to get sheet; if there's a problem, we'll fall back to placeholder data
+try:
+    sheet = get_sheet()
+except Exception as e:
+    sheet = None
+    st.warning("Couldn't connect to Google Sheets — showing placeholder data.")
 
-# --- Page config ---
-st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🟡", layout="wide")
-
-# --- Background + glowing + animations ---
+# ----------------- Styling block (font, title glow, ghosts, container) -----------------
 st.markdown(
     """
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        /* App background color (page) */
         .stApp {
-            background-color: #1a002b;
+            background-color: #120019;  /* deep purple page background */
             color: white;
         }
 
-        .glow-title {
+        /* Floating container (this holds the maze background and the leaderboard) */
+        .leaderboard-container {
+            background-image: url('https://i.pinimg.com/1200x/9f/c9/93/9fc99302c35961da24f02dcf74fc854d.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 18px;
+            padding: 28px;
+            width: 80%;
+            margin: 36px auto;
             text-align: center;
-            font-size: 52px;
-            font-weight: bold;
+            box-shadow: 0 0 40px rgba(255, 200, 0, 0.12);
+            backdrop-filter: blur(3px);
+        }
+
+        /* Press Start 2P pixel title with pulsing glow */
+        .glow-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 44px;
             color: #ffea00;
-            animation: pulseGlow 2s infinite;
+            margin: 6px 0 6px 0;
+            animation: pulseGlow 2.2s infinite;
         }
-
         @keyframes pulseGlow {
-            0% { text-shadow: 0 0 8px #ffea00; }
-            50% { text-shadow: 0 0 22px #ffea00; }
-            100% { text-shadow: 0 0 8px #ffea00; }
+            0% { text-shadow: 0 0 6px #ffea00; }
+            50% { text-shadow: 0 0 26px #ffea00; }
+            100% { text-shadow: 0 0 6px #ffea00; }
         }
 
+        /* Ghosts under title (floating) */
         .ghost-container {
             text-align: center;
-            margin-top: -20px;
-            margin-bottom: 10px;
+            margin-top: -6px;
+            margin-bottom: 6px;
         }
-
         .ghost {
             font-size: 40px;
             display: inline-block;
-            margin: 0 25px;
-            animation: floatGhost 3.5s ease-in-out infinite;
+            margin: 0 18px;
+            animation: floatGhost 3.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.06));
         }
-
-        .ghost:nth-child(2) { animation-delay: 0.7s; }
-        .ghost:nth-child(3) { animation-delay: 1.4s; }
-        .ghost:nth-child(4) { animation-delay: 2.1s; }
-
+        .ghost:nth-child(2) { animation-delay: 0.6s; }
+        .ghost:nth-child(3) { animation-delay: 1.2s; }
+        .ghost:nth-child(4) { animation-delay: 1.8s; }
         @keyframes floatGhost {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
+        /* Pixel-style subtext and footer */
         .subglow {
-            text-align: center;
-            font-size: 22px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
             color: #ffffff;
-            text-shadow: 0 0 8px #9933ff;
+            text-shadow: 0 0 10px #9933ff;
+            margin: 6px 0 14px 0;
+        }
+        .footer-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
+            color: #ffea00;
+            text-shadow: 0 0 12px #ffea00;
+            margin-top: 14px;
+            margin-bottom: 6px;
+        }
+
+        /* Make pandas/st.dataframe table text centered and larger */
+        div[data-testid="stDataFrameContainer"] table tbody tr td {
+            text-align: center !important;
+            font-size: 16px !important;
+            vertical-align: middle !important;
+        }
+        div[data-testid="stDataFrameContainer"] table thead tr th {
+            text-align: center !important;
+            font-size: 16px !important;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# --- Title ---
-st.markdown("<h1 class='glow-title'>🕹️👾 Pac-Man Leaderboard 🕹️👾</h1>", unsafe_allow_html=True)
+# ----------------- Container start -----------------
+st.markdown('<div class="leaderboard-container">', unsafe_allow_html=True)
 
-# --- Floating ghosts ---
+# Title + ghosts + subtext
+st.markdown("<div class='glow-title'>🕹️👾 Pac-Man Leaderboard 🕹️👾</div>", unsafe_allow_html=True)
 st.markdown(
     """
     <div class='ghost-container'>
@@ -87,39 +133,61 @@ st.markdown(
         <span class='ghost'>👻</span>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+st.markdown("<div class='subglow'>TOP TEAMS UPDATED LIVE DURING THE LGD!</div>", unsafe_allow_html=True)
 
-st.markdown("<p class='subglow'>Top teams updated live during the LGD!</p>", unsafe_allow_html=True)
+# ----------------- Fetch and prepare data -----------------
+if sheet is not None:
+    try:
+        data = sheet.get_all_records()
+        df = pd.DataFrame(data)
+    except Exception as e:
+        st.error("Error reading sheet — showing placeholder data.")
+        df = pd.DataFrame()
+else:
+    df = pd.DataFrame()
 
-# --- Fetch data ---
-data = sheet.get_all_records()
-df = pd.DataFrame(data)
-
+# Placeholder if empty
 if df.empty:
     df = pd.DataFrame({
         "team": ["Team A", "Team B", "Team C", "Team D"],
-        "score": [0, 0, 0, 0],
+        "score": [120, 95, 80, 60],
         "icon": ["🟡", "👻", "🍒", "⭐"]
     })
 
+# Normalize and sort
+df.columns = df.columns.str.lower()
+if "score" in df.columns:
+    # ensure numeric score for correct sort (coerce errors)
+    df["score"] = pd.to_numeric(df["score"], errors="coerce").fillna(0)
 df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
 
-# --- NEW: Safe CSS row highlighting ---
-def highlight_row(row):
+# ----------------- Safe CSS highlighting for top 3 -----------------
+def highlight_row_css(row):
+    # return list of CSS strings (one per column)
     if row.name == 0:
-        return ['background-color: #FFD70022; color: #FFD700; font-weight:bold;'] * len(row)
+        css = 'background-color: rgba(255,215,0,0.13); color: #FFD700; font-weight: 700;'
     elif row.name == 1:
-        return ['background-color: #C0C0C022; color: #C0C0C0; font-weight:bold;'] * len(row)
+        css = 'background-color: rgba(192,192,192,0.11); color: #C0C0C0; font-weight: 700;'
     elif row.name == 2:
-        return ['background-color: #CD7F3222; color: #CD7F32; font-weight:bold;'] * len(row)
+        css = 'background-color: rgba(205,127,50,0.11); color: #CD7F32; font-weight: 700;'
     else:
-        return [''] * len(row)
+        css = 'background-color: rgba(0,0,0,0.18); color: #FFFFFF;'
+    return [css] * len(row)
 
-styled_df = df.style.apply(highlight_row, axis=1)
+styled = df.style.apply(highlight_row_css, axis=1)
 
-# --- Display ---
-st.dataframe(styled_df, height=450)
+# Optionally adjust columns order / rename display headers (clean look)
+display_df = df.copy()
+# If you want nicer headers:
+display_df = display_df.rename(columns=lambda x: x.capitalize())
 
-# Footer
-st.markdown("<p class='subglow'>🍒 Keep scoring — power pellets await! 🍒</p>", unsafe_allow_html=True)
+# Display the styled dataframe
+st.dataframe(styled.set_table_attributes('class="dataframe"').hide_index(), height=420)
+
+# Footer text
+st.markdown("<div class='footer-text'>🍒 KEEP SCORING — POWER PELLETS AWAIT! 🍒</div>", unsafe_allow_html=True)
+
+# ----------------- Close container -----------------
+st.markdown('</div>', unsafe_allow_html=True)
