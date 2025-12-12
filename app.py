@@ -1,10 +1,3 @@
-@st.cache_resource
-def get_sheet():
-    client = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
-    sheet = client.open(SHEET_NAME).sheet1
-    return sheet
-
-sheet = get_sheet()
 import streamlit as st
 import pandas as pd
 import gspread
