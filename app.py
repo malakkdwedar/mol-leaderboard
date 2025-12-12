@@ -4,9 +4,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from streamlit_autorefresh import st_autorefresh
 
-# --- Auto-refresh every 5 seconds ---
-st_autorefresh(interval=5000, key="refresh")
-
 # --- Page config ---
 st.set_page_config(page_title="Pac-Man Leaderboard", page_icon="🟡", layout="wide")
 
