@@ -8,7 +8,7 @@ from streamlit_autorefresh import st_autorefresh
 @st.cache_resource
 def get_sheet():
     client = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
-    SHEET_KEY = "YOUR_SHEET_ID_HERE"  # replace with your actual sheet ID
+    SHEET_KEY = "1w39t-QeFhhXxctd5hGxdo-GM2gvKg2WCQOvwkfVB9e0"  # replace with your actual sheet ID
     sheet = client.open_by_key(SHEET_KEY).sheet1
     return sheet
 
