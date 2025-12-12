@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "digital-waters-481012-b4",
+  "private_key_id": "cacaef4e7cf76278b9f0c2606b258d75a68bbc85",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNVFLqrDQJfTka\nSPG/SkjVuxuDqlU3JFNnc/zUQdQt/6M44NEVRxlp8F5AYvegpD3Q6wMygkhUhWqg\nIvcL2+vv+wSh3DxrptYpqTOKsVw5WiFPhhr2qFMsAUzgaxb+N/kwum7jxjXYUcFt\nQ+ckt/lRVx3qKK9ON3+VE951e9G681W2FcCrMyevi9igHUzFbD200YXHmbQKsbWh\nTpN1K0ff5q0JpeANi78Eaz61gzbX37hc6etRvaWQ02N5wdrg+/4VjoIJMn0l38nh\nsK3yZ5BCEKhz5YZ6aCcVWnnZWxm5ZKMsfD4UF7q37bntlh69YwgWhr6ZglFRdZXA\nn88q0GDtAgMBAAECggEABtJwtDI+ysx4IqwtuzGfRW3kPJ1OwrwmqIJBTI+m6deC\nrf6wKQpHEEWRjyMX1/HFqB2ICHqgei/8fyFg8noZr/padWO3qOyjPtyTh9ja3kva\n+sc66vgiF6gyaUzSDdBu32rIaodJVxlPMHKMKEoXJ1WAtKplF+324x/T57Dj5VXC\nSUbP+rut+5Qm1arGUQn+mqRyPIVG/YZOYqIRM6Gy6BiF3H0vM3nacpnvSy6LN9hR\nrEbfakjw5oYUp+sI02XsTk7xJz1WUByp+vUrmDkjEpjhGdoyjlwJ8e0iA40gXvK5\nQz/MyezyGv8eu98GjOeKq4BEaha0lI7nqMbP4VRMQQKBgQDDOmthP437xmgKMHTP\nuo4rT0EpzF9pSzcwElnrnab6KoEemGMWHocnuogRed9sBr/rDFqGWQzHJ75r0icT\nSkC+TIytzGDYjBgjel5Y72tCNGYq3+wTZ8TSFK/ZrUAodxhQtzuw9ftgTlFNRWzT\nhlw3gP/HWiZhnNEKJff3LtRhoQKBgQC5UsA938weVc8BjcCvjbHgVbLsWcj/tTfE\neyIl0qti4vZKbPfhEI5eXOnxOBekRBzjJ/k56FsoA0hCEENc8AziTORBOegN7ReN\n1We7Y05BiCWZUN11Ibj0TWprCArtC4FuVpPHCk5ccLbJZTeK6DM8Sgf2xgu6WySg\n/lrp5bdTzQKBgFBfq7eUt7qQ+2I+gsjGsCMqdNRlfF5YBfd3hqeW9xiFCTV0XU7M\n8K2tgLlZKF9MBBUbt+UZokYXmbDACzBI4JC36S7gNnrQaluo1FDe+JSACBPcrk9q\n6D/pHmCKkCBYr50DYsK+8me6toQOcfg/l5WOOT90YNrM+c6oxQZxtCQhAoGBALfJ\nq0ExixqierLNw8PWQAt8sf7XZBDDxVSj0M+1x6Y/84UH4CRh6O8IMjG5MSkFK6jT\nYcTd/FkIOEbcHhIzNnPPUaamKM52zR8p/r/F0jwHK1KK8bVSBjyx8dHHnh5LhMbK\nMa/5NpFSbtP3/0dQ1E78FD3VVpgv/3lyBvNjj5YZAoGBAK5lz8TfWxCUl7M6GKQK\neOcXZcE8K1Btq3N0uP+kb3NfyIWcLVbMBbwjv4jO54OyLvGGjGNDSM+lNlnE+66p\nX59E4bMyCEYy4UZ1ZcEATKXy8qmktRiZbTPHb7VapWFMjjG/97u0ZQ3uWztpFJMa\n3hgyIKaxbaNPobVHsJs03vzZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "leaderboard-service@digital-waters-481012-b4.iam.gserviceaccount.com",
+  "client_id": "102471074547497058718",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/leaderboard-service%40digital-waters-481012-b4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
