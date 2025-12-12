@@ -1,5 +1,13 @@
 import streamlit as st
 
+# Debug: check which secrets are loaded
+st.write(st.secrets.keys())  # Should show ['gcp_service_account']
+
+# Debug: check that your JSON is correctly parsed
+creds_dict = st.secrets["gcp_service_account"]
+st.write(creds_dict['client_email'])
+import streamlit as st
+
 st.title("Debug Streamlit Secrets 🔍")
 
 # List all available secret keys
