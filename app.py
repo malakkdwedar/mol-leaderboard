@@ -1,21 +1,3 @@
-st.markdown("""
-<style>
-/* Remove Streamlit default padding */
-.block-container {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-}
-
-/* Hide Streamlit menu & footer */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-</style>
-"""
-, unsafe_allow_html=True)
-
 import streamlit as st
 import pandas as pd
 import gspread
