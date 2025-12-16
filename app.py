@@ -21,7 +21,6 @@ try:
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 except Exception:
-    # Fallback data if sheet fails
     df = pd.DataFrame({
         "team": ["Team A", "Team B", "Team C"],
         "score": [120, 95, 80],
@@ -39,9 +38,19 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* ---- GLOBAL ZOOM OUT ---- */
 .stApp {
+    zoom: 0.82;
     background-color: #1a0028 !important;
     color: white;
+}
+
+/* Firefox fallback */
+@supports not (zoom: 1) {
+    .stApp {
+        transform: scale(0.82);
+        transform-origin: top center;
+    }
 }
 
 /* Pixel glowing title */
@@ -119,8 +128,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- TITLE & GHOSTS & SUBTEXT ----------
+# ---------- TITLE & GHOSTS ----------
 st.markdown('<div class="glow-title">🕹️👾 Pac-Man Leaderboard 🕹️👾</div>', unsafe_allow_html=True)
+
 st.markdown("""
 <div class='ghost-container'>
     <span class='ghost'>👻</span>
@@ -129,9 +139,10 @@ st.markdown("""
     <span class='ghost'>👻</span>
 </div>
 """, unsafe_allow_html=True)
+
 st.markdown('<div class="subtext">TOP TEAMS UPDATED LIVE DURING THE LGD!</div>', unsafe_allow_html=True)
 
-# ---------- BUILD HTML TABLE ----------
+# ---------- TABLE ----------
 table_html = "<table class='pixel-table'><thead><tr><th>Rank</th><th>Team</th><th>Score</th><th>Icon</th></tr></thead><tbody>"
 for i, row in df.iterrows():
     cls = ""
